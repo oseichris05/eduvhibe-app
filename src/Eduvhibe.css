@@ -1779,3 +1779,68 @@ body {
     box-shadow: none;
   }
 }
+
+/* =========================================
+   14. ABOUT PAGE MOBILE FIXES
+   (Forces side-by-side layouts to stack on phones)
+========================================= */
+
+@media (max-width: 900px) {
+  
+  /* 1. Fix the Top Hero Section */
+  .about-hero {
+    flex-direction: column-reverse; /* Put text on top, image below (or swap if you prefer) */
+    text-align: center;
+    padding: 20px;
+    gap: 30px;
+  }
+
+  .about-text-content {
+    padding-right: 0; /* Remove any desktop padding */
+  }
+
+  .about-image-content {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .about-main-image {
+    width: 100%;
+    max-width: 100%; /* Ensure it doesn't overflow */
+    height: auto;    /* Let height adjust naturally */
+    max-height: 300px;
+  }
+
+  /* 2. Fix the Testimonials Grid */
+  .testimonials-layout {
+    display: flex;
+    flex-direction: column; /* Stack them! */
+    gap: 20px;
+  }
+
+  .community-image-side {
+    width: 100%;
+    display: none; /* OPTIONAL: Hide the big generic image on mobile to save space */
+  }
+
+  .carousel-container {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* 3. Fix the Profile Card */
+  .edu-profile-card {
+    width: 100%;
+    padding: 20px;
+  }
+
+  .profile-header {
+    flex-direction: column; /* Stack image and name */
+    text-align: center;
+    gap: 15px;
+  }
+
+  .profile-avatar-img {
+    margin: 0 auto; /* Center the circle image */
+  }
+}
