@@ -2046,3 +2046,74 @@ body {
     background-color: var(--color-primary-500);
   }
 }
+
+/* =========================================
+   16. FONT RESTORATION & POLISH
+   (Fixing the "Small & Ugly" Text)
+========================================= */
+
+/* 1. Reset Global Font Size */
+body, html {
+  font-size: 16px; /* Base size (was likely shrinking to 14px or less) */
+  letter-spacing: -0.01em; /* Tighter, more modern tracking */
+}
+
+/* 2. Beef up the Navigation Bar */
+.unified-navbar {
+  padding: 15px 25px; /* More breathing room */
+  height: auto;
+  min-height: 70px;
+}
+
+.nav-brand .brand-text {
+  font-size: 1.8rem; /* Much bigger logo */
+  font-weight: 900;  /* Extra bold */
+  letter-spacing: -1px;
+}
+
+/* 3. Make Tabs Readable & Clickable */
+.nav-pill {
+  font-size: 1.05rem; /* Increased from 0.9rem */
+  padding: 10px 20px; /* Larger touch targets */
+  font-weight: 600;
+}
+
+/* 4. Fix the Login/Profile Text */
+.mini-login-btn {
+  font-size: 1rem;
+  padding: 10px 24px;
+}
+
+.mini-name {
+  font-size: 1rem; /* Readable name */
+  font-weight: 700;
+}
+
+.mini-logout-btn {
+  font-size: 0.85rem; /* Still small, but readable */
+  padding: 6px 14px;
+}
+
+/* 5. Fix Mobile Layout Text */
+@media (max-width: 768px) {
+  .nav-brand .brand-text {
+    font-size: 1.6rem; /* Slightly smaller on phone, but still big */
+  }
+  
+  .nav-tabs-scroll {
+    padding-top: 15px;
+    padding-bottom: 5px;
+    gap: 12px; /* More space between buttons */
+  }
+
+  .nav-pill {
+    font-size: 1rem; /* Keep tabs readable on phone */
+    background-color: var(--color-secondary-100); /* clearer button background */
+    color: var(--color-secondary-800);
+  }
+  
+  .nav-pill.active {
+    background-color: var(--color-primary-600);
+    color: white;
+  }
+}
