@@ -2047,73 +2047,81 @@ body {
   }
 }
 
+
 /* =========================================
-   16. FONT RESTORATION & POLISH
-   (Fixing the "Small & Ugly" Text)
+   16. GLOBAL FONT ENFORCER (The "Big Text" Fix)
+   (Forces the entire site to be readable)
 ========================================= */
 
-/* 1. Reset Global Font Size */
-body, html {
-  font-size: 16px; /* Base size (was likely shrinking to 14px or less) */
-  letter-spacing: -0.01em; /* Tighter, more modern tracking */
+/* 1. Set the Base Size for the whole page */
+:root {
+  font-size: 16px; /* Standard Web Size (was likely shrinking) */
 }
 
-/* 2. Beef up the Navigation Bar */
-.unified-navbar {
-  padding: 15px 25px; /* More breathing room */
-  height: auto;
-  min-height: 70px;
+/* 2. Force Body and HTML to respect the base size */
+html, body {
+  font-size: 16px !important;
+  line-height: 1.6 !important; /* Adds breathing room between lines */
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  -webkit-font-smoothing: antialiased;
 }
 
-.nav-brand .brand-text {
-  font-size: 1.8rem; /* Much bigger logo */
-  font-weight: 900;  /* Extra bold */
-  letter-spacing: -1px;
+/* 3. Scale Up Standard Text Elements */
+p, li, span, div, a {
+  font-size: 1rem; /* EQUALS 16px */
+  color: var(--color-secondary-700);
 }
 
-/* 3. Make Tabs Readable & Clickable */
+/* 4. Force Inputs & Buttons to be Readable (Browsers shrink these by default!) */
+input, button, select, textarea {
+  font-size: 1rem !important; /* Force 16px */
+  font-family: inherit !important;
+}
+
+/* 5. Beef Up the Headings */
+h1, .edu-title, .about-title {
+  font-size: 2.5rem !important; /* Big & Bold (40px) */
+  line-height: 1.2 !important;
+  margin-bottom: 1rem !important;
+}
+
+h2 {
+  font-size: 2rem !important; /* (32px) */
+  margin-bottom: 0.75rem !important;
+}
+
+h3 {
+  font-size: 1.5rem !important; /* (24px) */
+  margin-bottom: 0.5rem !important;
+}
+
+h4, h5, h6 {
+  font-size: 1.25rem !important; /* (20px) */
+  font-weight: 700 !important;
+}
+
+/* 6. Specific Fixes for Your Cards */
+.guide-excerpt, .article-body p, .about-description {
+  font-size: 1.1rem !important; /* Slightly larger for reading paragraphs */
+  line-height: 1.7 !important;
+}
+
 .nav-pill {
-  font-size: 1.05rem; /* Increased from 0.9rem */
-  padding: 10px 20px; /* Larger touch targets */
-  font-weight: 600;
+  font-size: 1rem !important; /* Fix tiny tabs */
+  padding: 10px 20px !important;
 }
 
-/* 4. Fix the Login/Profile Text */
-.mini-login-btn {
-  font-size: 1rem;
-  padding: 10px 24px;
-}
-
-.mini-name {
-  font-size: 1rem; /* Readable name */
-  font-weight: 700;
-}
-
-.mini-logout-btn {
-  font-size: 0.85rem; /* Still small, but readable */
-  padding: 6px 14px;
-}
-
-/* 5. Fix Mobile Layout Text */
+/* 7. Mobile Adjustments (Keep it readable on phone!) */
 @media (max-width: 768px) {
-  .nav-brand .brand-text {
-    font-size: 1.6rem; /* Slightly smaller on phone, but still big */
-  }
-  
-  .nav-tabs-scroll {
-    padding-top: 15px;
-    padding-bottom: 5px;
-    gap: 12px; /* More space between buttons */
+  html, body {
+    font-size: 15px !important; /* Slightly smaller on phone, but still clear */
   }
 
-  .nav-pill {
-    font-size: 1rem; /* Keep tabs readable on phone */
-    background-color: var(--color-secondary-100); /* clearer button background */
-    color: var(--color-secondary-800);
-  }
+  h1 { font-size: 2rem !important; }
+  h2 { font-size: 1.75rem !important; }
+  h3 { font-size: 1.4rem !important; }
   
-  .nav-pill.active {
-    background-color: var(--color-primary-600);
-    color: white;
+  .app-container {
+    padding: 10px !important; /* Less padding on edges so text has more room */
   }
 }
