@@ -1,0 +1,1781 @@
+/* src/Eduvhibe.css */
+
+:root {
+  /* ===== MY OFFICIAL CEO COLOR SYSTEM ===== */
+  --color-primary-50: #e8f3f3;
+  --color-primary-100: #cfe7e6;
+  --color-primary-200: #a6d2d1;
+  --color-primary-300: #76b9b7;
+  --color-primary-400: #4aa19e;
+  --color-primary-500: #2d8785;
+  --color-primary-600: #1f7177;
+  --color-primary-700: #195c61;
+  --color-primary-800: #13464b;
+  --color-primary-900: #0b2f33;
+
+  --color-secondary-50: #f8fafb;
+  --color-secondary-100: #eef2f5;
+  --color-secondary-200: #d6dee6;
+  --color-secondary-300: #b4c0cb;
+  --color-secondary-400: #91a0ad;
+  --color-secondary-500: #6f7f8f;
+  --color-secondary-600: #586574;
+  --color-secondary-700: #445160;
+  --color-secondary-800: #303b46;
+  --color-secondary-900: #1f2730;
+
+  --color-accent-green: #5ef46d;
+  --color-accent-orange: #f4a261;
+  --color-accent-red: #e76f51;
+  --color-accent-purple: #5b7b9a;
+  --color-accent-blue: #2a6f97;
+  --color-accent-teal: #2a9d8f;
+  
+  --color-bg-gradient: linear-gradient(135deg, #fdfcf9 0%, #f1f4f6 100%);
+
+  /* My custom border radiuses for smooth corners */
+  --sh-radius-card: 16px;
+  --sh-radius-pill: 50px;
+}
+
+/* =========================================
+   1. MY BASE LAYOUT AND TABS
+========================================= */
+body {
+  margin: 0;
+  background: var(--color-bg-gradient); 
+}
+
+.eduvhibe-container {
+  min-height: 100vh;
+  padding: 20px 20px 40px; 
+  font-family: 'Inter', sans-serif;
+}
+
+/* Setting up my main header area */
+.edu-header {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.edu-title {
+  color: var(--color-primary-900);
+  font-size: 2.5rem;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.edu-tagline {
+  color: var(--color-primary-500);
+  font-size: 1.1rem;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* My smooth scrolling navigation tabs */
+.edu-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 40px;
+  border-bottom: 1px solid var(--color-secondary-200);
+  padding-bottom: 16px;
+  justify-content: center; 
+  overflow-x: auto; 
+  -webkit-overflow-scrolling: touch; 
+  scrollbar-width: none; 
+}
+
+.edu-tabs::-webkit-scrollbar {
+  display: none; 
+}
+
+@media (max-width: 768px) {
+  .edu-tabs {
+    justify-content: flex-start;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+
+/* How my unselected tabs look */
+.edu-tab {
+  background: transparent;
+  border: 1px solid var(--color-secondary-300);
+  color: var(--color-secondary-600);
+  padding: 8px 20px;
+  border-radius: var(--sh-radius-pill); 
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.edu-tab:hover {
+  border-color: var(--color-primary-400);
+  color: var(--color-primary-600);
+}
+
+/* The tab the user is currently looking at! */
+.edu-tab.active {
+  background-color: var(--color-primary-500);
+  color: white;
+  border-color: var(--color-primary-500);
+}
+
+.edu-placeholder {
+  padding: 40px;
+  text-align: center;
+  color: var(--color-secondary-500);
+  background: white;
+  border-radius: var(--sh-radius-card);
+  border: 1px dashed var(--color-secondary-300);
+}
+
+
+/* =========================================
+   2. REUSABLE COMPONENTS (SEARCH & PAGINATION)
+========================================= */
+/* My smart search bar that I use across multiple tabs */
+.notes-toolbar {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 30px;
+  max-width: 800px;
+}
+
+.notes-search-input {
+  flex: 1;
+  padding: 14px 20px;
+  border: 1px solid var(--color-secondary-200);
+  border-radius: var(--sh-radius-card);
+  font-family: inherit;
+  font-size: 1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  color: var(--color-secondary-800);
+}
+
+.notes-search-input:focus {
+  outline: none;
+  border-color: var(--color-primary-500);
+}
+
+.notes-filter {
+  padding: 14px 20px;
+  border: 1px solid var(--color-secondary-200);
+  border-radius: var(--sh-radius-card);
+  background-color: white;
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--color-secondary-700);
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .notes-toolbar {
+    flex-direction: column;
+  }
+}
+
+/* My custom pagination so the database doesn't flood the screen */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 60px;
+  flex-wrap: wrap; 
+}
+
+.page-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  border: 1px solid var(--color-secondary-200);
+  background-color: white;
+  color: var(--color-secondary-600);
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.page-btn.nav-btn {
+  width: auto;
+  padding: 0 16px;
+}
+
+.page-btn:hover:not(:disabled) {
+  border-color: var(--color-primary-400);
+  color: var(--color-primary-600);
+}
+
+.page-btn.active-page {
+  background-color: var(--color-primary-500);
+  color: white;
+  border-color: var(--color-primary-500);
+}
+
+.page-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: var(--color-secondary-50);
+}
+
+
+/* =========================================
+   3. MY ABOUT PAGE (HERO, TESTIMONIALS, PROFILE)
+========================================= */
+.about-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* The top section explaining Eduvhibe */
+.about-hero {
+  display: flex;
+  gap: 40px;
+  background: white;
+  padding: 40px;
+  border-radius: var(--sh-radius-card);
+  border: 1px solid var(--color-secondary-200);
+  margin-bottom: 40px;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+}
+
+.about-text-content {
+  flex: 1;
+}
+
+.about-image-content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.about-title {
+  color: var(--color-primary-900);
+  font-size: 2.2rem;
+  margin-bottom: 16px;
+  font-weight: 700;
+}
+
+.about-description {
+  color: var(--color-secondary-700);
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.about-features-list {
+  list-style: none;
+  padding: 0;
+}
+
+.about-features-list li {
+  margin-bottom: 16px;
+  color: var(--color-secondary-700);
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  line-height: 1.5;
+}
+
+.check-icon {
+  color: var(--color-primary-500);
+  font-weight: bold;
+  background: var(--color-primary-50);
+  padding: 2px 6px;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  margin-top: 2px;
+}
+
+/* My moving carousel section */
+.testimonials-section {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.carousel-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  overflow: hidden; 
+  position: relative;
+  padding-bottom: 30px;
+}
+
+.carousel-track {
+  display: flex;
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1); 
+  width: 100%;
+}
+
+.carousel-slide {
+  min-width: 100%; 
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+.testimonial-card {
+  background: white;
+  padding: 30px;
+  border-radius: var(--sh-radius-card);
+  border: 1px solid var(--color-secondary-200);
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+}
+
+.testimonial-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.testimonial-name {
+  margin: 0 0 4px 0;
+  color: var(--color-primary-900);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.testimonial-role {
+  margin: 0;
+  color: var(--color-primary-500);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.testimonial-quote {
+  color: var(--color-secondary-700);
+  font-style: italic;
+  line-height: 1.6;
+}
+
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  background-color: var(--color-secondary-300);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.active-dot {
+  background-color: var(--color-primary-500);
+  width: 24px;
+  border-radius: 5px; 
+}
+
+/* The card where I show off my skills */
+.edu-about-section {
+  max-width: 700px;
+}
+
+.edu-profile-card {
+  background-color: white;
+  border: 1px solid var(--color-secondary-200);
+  border-radius: var(--sh-radius-card);
+  padding: 32px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 24px;
+  border-bottom: 1px dashed var(--color-secondary-200);
+  padding-bottom: 20px;
+}
+
+.profile-name {
+  color: var(--color-primary-900);
+  font-size: 1.8rem;
+  margin: 0 0 4px 0;
+}
+
+.profile-title {
+  color: var(--color-primary-600);
+  font-size: 1rem;
+  margin: 0;
+  font-weight: 500;
+}
+
+.profile-body p {
+  color: var(--color-secondary-700);
+  line-height: 1.6;
+  margin-bottom: 16px;
+  font-size: 1.05rem;
+}
+
+/* My Image styling rules */
+.about-main-image {
+  width: 100%;
+  max-width: 400px;
+  height: 420px; 
+  border-radius: var(--sh-radius-card);
+  object-fit: cover; 
+  object-position: center top; 
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.testimonial-avatar-img {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  object-fit: cover; 
+  border: 2px solid var(--color-primary-100);
+}
+
+.profile-avatar-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%; 
+  object-fit: cover;
+  border: 3px solid var(--color-primary-500);
+}
+
+.community-banner-img {
+  width: 100%;
+  max-width: 800px;
+  height: 200px;
+  border-radius: var(--sh-radius-card);
+  object-fit: cover;
+  opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+  .about-hero { flex-direction: column; }
+}
+
+
+/* =========================================
+   4. MY COMPREHENSIVE FOOTER
+========================================= */
+.edu-footer {
+  background-color: white;
+  border: 1px solid var(--color-secondary-200);
+  padding: 50px 40px 20px;
+  margin-top: 80px;
+  border-radius: var(--sh-radius-card);
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.5fr; 
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.footer-logo {
+  color: var(--color-primary-900);
+  font-size: 2rem;
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-weight: 700;
+}
+
+.footer-contact {
+  color: var(--color-secondary-700);
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+}
+
+.footer-socials {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.social-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--color-secondary-300);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-secondary-600);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.social-icon:hover {
+  background-color: var(--color-primary-500);
+  color: white;
+  border-color: var(--color-primary-500);
+}
+
+.footer-heading {
+  color: var(--color-primary-900);
+  font-size: 1.1rem;
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li {
+  margin-bottom: 12px;
+}
+
+/* Making my footer buttons act exactly like links */
+.footer-link-btn {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: var(--color-secondary-600);
+  font-size: 0.95rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: color 0.2s ease, padding-left 0.2s ease;
+  text-align: left;
+}
+
+.footer-link-btn:hover {
+  color: var(--color-primary-500);
+  padding-left: 4px;
+}
+
+.footer-text {
+  color: var(--color-secondary-600);
+  line-height: 1.5;
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+}
+
+.newsletter-form {
+  display: flex;
+  gap: 10px;
+}
+
+.newsletter-input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid var(--color-secondary-300);
+  border-radius: var(--sh-radius-pill);
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.2s ease;
+}
+
+.newsletter-input:focus {
+  border-color: var(--color-primary-500);
+}
+
+.newsletter-btn {
+  padding: 12px 24px;
+  background-color: var(--color-primary-500);
+  color: white;
+  border: none;
+  border-radius: var(--sh-radius-pill);
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+}
+
+.newsletter-btn:hover {
+  background-color: var(--color-primary-700);
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 24px;
+  border-top: 1px solid var(--color-secondary-200);
+  color: var(--color-secondary-500);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .footer-top { grid-template-columns: 1fr; gap: 30px; }
+  .newsletter-form { flex-direction: column; }
+}
+
+
+/* =========================================
+   5. MY COURSE MATERIALS (NOTES) TAB
+========================================= */
+.notes-container {
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+.course-materials-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.course-materials-title {
+  color: var(--color-primary-900);
+  font-size: 2.2rem;
+  margin-bottom: 10px;
+}
+
+.course-materials-subtitle {
+  color: var(--color-primary-600); 
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+}
+
+.resources-count {
+  color: var(--color-secondary-500);
+  font-size: 1rem;
+  text-align: left;
+  margin-bottom: 15px;
+  font-weight: 500;
+}
+
+.notes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+/* My beautiful 2-Tone Card Design for the courses */
+.course-card {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease;
+}
+
+.course-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* The dark primary color top half */
+.course-card-top {
+  background-color: var(--color-primary-700); 
+  padding: 24px;
+  color: white;
+  min-height: 120px;
+  border-radius: 8px 8px 0 0;
+}
+
+.course-card-top h3 {
+  margin: 0 0 20px 0;
+  font-size: 1.25rem;
+  line-height: 1.4;
+}
+
+.course-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+/* The crisp white bottom half */
+.course-card-bottom {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  background: white;
+  border: 1px solid var(--color-secondary-200);
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+}
+
+.course-card-bottom p {
+  color: var(--color-secondary-700);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0 0 30px 0;
+  flex-grow: 1;
+}
+
+.course-actions {
+  display: flex;
+  gap: 15px;
+}
+
+.btn-download, .btn-preview {
+  flex: 1;
+  padding: 10px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.btn-download {
+  background-color: var(--color-primary-600);
+  color: white;
+  border: none;
+}
+
+.btn-download:hover {
+  background-color: var(--color-primary-800);
+}
+
+.btn-preview {
+  background-color: white;
+  color: var(--color-primary-600);
+  border: 1px solid var(--color-primary-600);
+}
+
+.btn-preview:hover {
+  background-color: var(--color-primary-50);
+}
+
+
+/* =========================================
+   6. MY VIDEO RESOURCES TAB
+========================================= */
+.videos-container {
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+.tab-header-area {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--color-secondary-200);
+}
+
+.tab-main-title {
+  color: var(--color-primary-900); 
+  font-size: 2rem;
+  margin: 0 0 8px 0;
+  font-weight: 700; 
+}
+
+.tab-subtitle {
+  color: var(--color-secondary-600);
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* The Upload button for my students */
+.upload-video-btn {
+  background-color: var(--color-primary-600); 
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.upload-video-btn:hover {
+  background-color: var(--color-primary-800);
+  transform: translateY(-2px);
+}
+
+.videos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.video-card {
+  background: white;
+  border: 1px solid var(--color-secondary-200);
+  border-radius: var(--sh-radius-card);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.video-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.08);
+  border-color: var(--color-primary-200);
+}
+
+/* Making sure my video thumbnails look perfect */
+.video-thumbnail-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9; 
+  display: block;
+  overflow: hidden;
+  background-color: var(--color-secondary-200);
+}
+
+.video-thumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.play-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.play-button {
+  width: 60px;
+  height: 60px;
+  background-color: var(--color-primary-500);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  padding-left: 5px; 
+  transform: scale(0.8);
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.video-card:hover .play-overlay { opacity: 1; }
+.video-card:hover .play-button { transform: scale(1); }
+.video-card:hover .video-thumbnail { transform: scale(1.05); }
+
+.video-duration {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  z-index: 2;
+}
+
+.video-info {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.video-title {
+  color: var(--color-primary-900);
+  font-size: 1.1rem;
+  margin: 0 0 16px 0;
+  font-weight: 600;
+  line-height: 1.4;
+  flex-grow: 1;
+}
+
+.video-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  color: var(--color-secondary-500);
+  border-top: 1px dashed var(--color-secondary-200);
+  padding-top: 16px;
+}
+
+.video-category {
+  background: var(--color-primary-50);
+  color: var(--color-primary-700);
+  padding: 4px 10px;
+  border-radius: var(--sh-radius-pill);
+  font-weight: 600;
+}
+
+
+/* =========================================
+   7. MY SURVIVAL GUIDE TAB
+========================================= */
+.guides-container {
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+.guides-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.guide-card {
+  background: white;
+  border: 1px solid var(--color-secondary-200);
+  border-radius: var(--sh-radius-card);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.guide-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.08);
+  border-color: var(--color-primary-200);
+}
+
+.guide-image-container {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background-color: var(--color-secondary-200);
+}
+
+.guide-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.guide-card:hover .guide-image { transform: scale(1.05); }
+
+.guide-category-badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background-color: var(--color-primary-500);
+  color: white;
+  padding: 4px 12px;
+  border-radius: var(--sh-radius-pill);
+  font-size: 0.8rem;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.guide-content {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.guide-title {
+  color: var(--color-primary-900);
+  font-size: 1.2rem;
+  margin: 0 0 12px 0;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.guide-excerpt {
+  color: var(--color-secondary-600);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0 0 24px 0;
+  flex-grow: 1;
+}
+
+.guide-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px dashed var(--color-secondary-200);
+  padding-top: 16px;
+}
+
+.guide-read-time {
+  font-size: 0.85rem;
+  color: var(--color-secondary-500);
+  font-weight: 500;
+}
+
+.guide-read-btn {
+  background: transparent;
+  border: none;
+  color: var(--color-primary-600);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  padding: 0;
+}
+
+.guide-read-btn:hover {
+  color: var(--color-primary-800);
+  text-decoration: underline;
+}
+
+
+/* =========================================
+   8. MY INDIVIDUAL ARTICLE VIEW
+========================================= */
+.article-view-container {
+  background-color: transparent; 
+  padding: 10px 0 40px 0;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+.back-to-guides-btn {
+  background: var(--color-primary-50);
+  color: var(--color-primary-600);
+  border: 1px solid var(--color-primary-200);
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 24px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.back-to-guides-btn:hover {
+  background: var(--color-primary-100);
+  color: var(--color-primary-800);
+}
+
+.article-layout {
+  display: grid;
+  grid-template-columns: 2.5fr 1fr;
+  gap: 24px;
+}
+
+.card-wrapper {
+  background-color: white;
+  border-radius: var(--sh-radius-card);
+  padding: 40px;
+  border: 1px solid var(--color-secondary-200);
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+}
+
+.article-headline {
+  color: var(--color-primary-800); 
+  font-size: 2.2rem;
+  margin-top: 0;
+  margin-bottom: 20px;
+  line-height: 1.3;
+  font-weight: 700;
+}
+
+.article-meta-row {
+  display: flex;
+  gap: 20px;
+  color: var(--color-secondary-500);
+  font-size: 0.95rem;
+  margin-bottom: 30px;
+  border-bottom: 1px solid var(--color-secondary-200);
+  padding-bottom: 20px;
+}
+
+.article-hero-img {
+  width: 100%;
+  height: 350px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 30px;
+}
+
+.article-excerpt-styled {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--color-primary-600);
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.article-body p {
+  color: var(--color-secondary-700);
+  line-height: 1.8;
+  font-size: 1.05rem;
+  margin-bottom: 24px;
+}
+
+.article-subheading {
+  color: var(--color-primary-600);
+  font-size: 1.3rem;
+  margin-top: 30px;
+  margin-bottom: 12px;
+  font-weight: 700;
+}
+
+.sidebar-heading {
+  color: var(--color-primary-700);
+  text-transform: uppercase;
+  font-size: 1.1rem;
+  margin-top: 0;
+  border-bottom: 2px solid var(--color-secondary-100);
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.sidebar-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-item {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--color-secondary-100);
+  color: var(--color-secondary-700);
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: color 0.2s;
+  font-weight: 500;
+}
+
+.sidebar-item:hover {
+  color: var(--color-primary-500);
+}
+
+@media (max-width: 900px) {
+  .article-layout { grid-template-columns: 1fr; }
+}
+
+
+/* =========================================
+   9. MY CGPA TRACKER
+========================================= */
+.cgpa-container {
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+.cgpa-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  max-width: 1100px;
+  margin: 0 auto 60px;
+}
+
+.cgpa-card {
+  background: white;
+  border-radius: var(--sh-radius-card);
+  padding: 40px;
+  border: 1px solid var(--color-secondary-200);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.cgpa-card-title {
+  color: var(--color-primary-700); 
+  font-size: 1.4rem;
+  margin-top: 0;
+  margin-bottom: 24px;
+  font-weight: 700;
+}
+
+.cgpa-subtitle {
+  color: var(--color-secondary-600);
+  margin-bottom: 20px;
+}
+
+.semester-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.sem-tab-btn {
+  background: white;
+  border: 1px solid var(--color-secondary-300);
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--color-secondary-600);
+  transition: all 0.2s;
+}
+
+.sem-tab-btn.active-sem {
+  background: var(--color-primary-500);
+  color: white;
+  border-color: var(--color-primary-500);
+}
+
+.course-input-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.cgpa-input {
+  padding: 12px;
+  border: 1px solid var(--color-secondary-300);
+  border-radius: 8px;
+  font-family: inherit;
+  outline: none;
+}
+
+.cgpa-input:focus {
+  border-color: var(--color-primary-500);
+}
+
+.name-input { flex: 2; }
+.cr-input { flex: 1; max-width: 80px; }
+.grade-input { flex: 1; }
+
+.add-course-btn {
+  background: var(--color-primary-500);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.add-course-btn:hover {
+  background: var(--color-primary-700);
+}
+
+.added-courses-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 30px 0;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.course-list-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid var(--color-secondary-100);
+  font-size: 0.95rem;
+  color: var(--color-secondary-700);
+}
+
+.cgpa-action-row {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.calc-btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.brand-btn { background: var(--color-primary-500); flex-grow: 1; }
+.brand-btn:hover { background: var(--color-primary-700); }
+
+.blue-btn { background: var(--color-accent-blue); width: 100%; }
+.blue-btn:hover { filter: brightness(0.9); }
+
+.reset-btn { background: white; color: var(--color-secondary-600); border: 1px solid var(--color-secondary-300); }
+.reset-btn:hover { background: var(--color-secondary-50); color: var(--color-secondary-800); }
+
+/* The beautiful gradient box using my primary brand colors */
+.gradient-box {
+  background: linear-gradient(135deg, var(--color-primary-400), var(--color-primary-700));
+  border-radius: 12px;
+  padding: 30px;
+  text-align: center;
+  color: white;
+  box-shadow: 0 10px 15px -3px rgba(45, 135, 133, 0.3); /* Adjusted shadow to match brand teal */
+}
+
+.main-cgpa-box {
+  padding: 50px 30px;
+  margin-bottom: 30px;
+}
+
+.gradient-box h4 { margin: 0 0 10px 0; font-weight: 500; font-size: 1.1rem; }
+.gradient-box p { margin: 10px 0 0 0; font-size: 0.9rem; opacity: 0.9; }
+.huge-number { font-size: 4rem; font-weight: 800; line-height: 1; }
+
+.grade-legend {
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--color-secondary-700);
+}
+
+@media (max-width: 900px) {
+  .cgpa-grid { grid-template-columns: 1fr; }
+  .course-input-row { flex-wrap: wrap; }
+  .name-input { min-width: 100%; }
+  .grade-legend { flex-wrap: wrap; gap: 10px; justify-content: flex-start; }
+}
+
+/* =========================================
+   10. GLOBAL ANIMATIONS
+========================================= */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; transform: translateX(0); }
+  50% { opacity: 1; transform: translateX(3px); }
+  100% { opacity: 0.6; transform: translateX(0); }
+}
+
+/* --- 1. Fix the Swipe Hint (Hide on Desktop) --- */
+.mobile-swipe-hint {
+  display: none; /* Strictly hides it on laptop/desktop */
+  text-align: right;
+  font-size: 0.8rem;
+  color: var(--color-secondary-500);
+  margin-bottom: 8px;
+  padding-right: 10px;
+  font-style: italic;
+  animation: pulse 2s infinite;
+}
+
+@media (max-width: 768px) {
+  .mobile-swipe-hint {
+    display: block; /* ONLY shows on mobile screens */
+  }
+}
+
+/* --- 2. Fix the Search Dropdown Weirdness --- */
+.notes-filter {
+  padding: 14px 20px;
+  border: 1px solid var(--color-secondary-200);
+  border-radius: var(--sh-radius-card);
+  background-color: white;
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--color-secondary-700);
+  cursor: pointer;
+  appearance: auto; /* Forces the browser to render a clean dropdown */
+}
+
+.notes-filter option {
+  background-color: white;
+  color: var(--color-secondary-800);
+}
+
+/* --- 3. Fix the CGPA Calculate Buttons Contrast --- */
+.calc-btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  /* Removed the buggy color: white !important; from here */
+}
+
+.brand-btn { 
+  background-color: var(--color-primary-500); 
+  color: white; /* Added here instead! */
+  flex-grow: 1; 
+}
+
+.brand-btn:hover { 
+  background-color: var(--color-primary-700); 
+}
+
+.blue-btn { 
+  background-color: var(--color-accent-blue); 
+  color: white; /* Added here instead! */
+  width: 100%; 
+}
+.blue-btn:hover { 
+  filter: brightness(0.9); 
+}
+
+/* Reset Buttons */
+.reset-btn { 
+  background-color: white; 
+  color: var(--color-secondary-600); /* This will actually show up now! */
+  border: 1px solid var(--color-secondary-300); 
+}
+.reset-btn:hover { 
+  background-color: var(--color-secondary-50); 
+  color: var(--color-secondary-800); 
+}
+
+/* --- 4. Fix Pagination Colors --- */
+.page-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  border: 1px solid var(--color-secondary-200);
+  background-color: white;
+  color: var(--color-secondary-700);
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.page-btn.active-page {
+  background-color: var(--color-primary-500);
+  color: white;
+  border-color: var(--color-primary-500);
+}
+
+
+/* =========================================
+   11. AUTHENTICATION MODAL
+========================================= */
+.auth-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(11, 47, 51, 0.7); /* Uses your primary-900 with opacity */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensures it sits on top of EVERYTHING */
+  backdrop-filter: blur(4px); /* Modern blur effect */
+}
+
+.auth-modal-card {
+  background-color: white;
+  width: 100%;
+  max-width: 400px;
+  border-radius: var(--sh-radius-card);
+  padding: 40px;
+  position: relative;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.auth-close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: transparent;
+  border: none;
+  font-size: 1.8rem;
+  color: var(--color-secondary-400);
+  cursor: pointer;
+  transition: color 0.2s;
+  line-height: 1;
+}
+
+.auth-close-btn:hover {
+  color: var(--color-secondary-800);
+}
+
+.auth-title {
+  color: var(--color-primary-900);
+  margin: 0 0 10px 0;
+  font-size: 1.8rem;
+  text-align: center;
+}
+
+.auth-subtitle {
+  color: var(--color-secondary-600);
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 0.95rem;
+}
+
+.auth-error-box {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+  text-align: center;
+  border: 1px solid #fca5a5;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.auth-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.auth-input-group label {
+  font-size: 0.9rem;
+  color: var(--color-secondary-700);
+  font-weight: 600;
+}
+
+.auth-input-group input {
+  padding: 12px 16px;
+  border: 1px solid var(--color-secondary-300);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.auth-input-group input:focus {
+  border-color: var(--color-primary-500);
+}
+
+.auth-submit-btn {
+  background-color: var(--color-primary-500);
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: var(--sh-radius-pill);
+  font-size: 1.05rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 10px;
+}
+
+.auth-submit-btn:hover:not(:disabled) {
+  background-color: var(--color-primary-700);
+}
+
+.auth-submit-btn:disabled {
+  background-color: var(--color-secondary-300);
+  cursor: not-allowed;
+}
+
+.auth-toggle-area {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 0.95rem;
+  color: var(--color-secondary-600);
+}
+
+.auth-toggle-link {
+  color: var(--color-primary-600);
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.auth-toggle-link:hover {
+  color: var(--color-primary-800);
+}
+
+
+/* =========================================
+   12. HEADER LAYOUT FIXES (The 3-Lane Highway)
+========================================= */
+
+/* 1. Turn the header into a Flexbox Row */
+.edu-header {
+  display: flex !important; /* Force flex to override any old block styles */
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background-color: white; 
+  position: relative;
+  border-bottom: 1px solid var(--color-secondary-200);
+  margin-bottom: 30px;
+}
+
+/* 2. Define the 3 Lanes */
+.header-left {
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.header-center {
+  flex: 2;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.header-right {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end; /* Pushes login button to the far right */
+  align-items: center;
+}
+
+/* 3. Style the Title (Overrides your default .edu-title margins) */
+.edu-title {
+  margin: 0;
+  font-size: 1.8rem;
+  line-height: 1.2;
+}
+
+.edu-tagline {
+  margin: 4px 0 0 0;
+  font-size: 0.9rem;
+}
+
+/* 4. Style the "Back to Sharether" Button */
+.back-link-btn {
+  text-decoration: none;
+  color: var(--color-secondary-600);
+  font-weight: 600;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background-color: var(--color-secondary-50);
+  border: 1px solid var(--color-secondary-200);
+  transition: all 0.2s ease;
+}
+
+.back-link-btn:hover {
+  background-color: var(--color-secondary-100);
+  color: var(--color-primary-600);
+  border-color: var(--color-primary-200);
+}
+
+/* 5. Style the Login Button */
+.login-btn-main {
+  background-color: var(--color-primary-600);
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 25px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.login-btn-main:hover {
+  background-color: var(--color-primary-700);
+}
+
+/* 6. Mobile Responsiveness */
+@media (max-width: 768px) {
+  .edu-header {
+    padding: 10px 15px;
+  }
+  
+  /* Hide text, keep arrow */
+  .back-text { display: none; }
+  .back-link-btn { padding: 8px; }
+  
+  /* Hide slogan and username on phone */
+  .edu-tagline { display: none; }
+  .user-info-text { display: none; }
+  
+  .edu-title { font-size: 1.4rem; }
+}
+
+/* =========================================
+   13. LOGGED-IN USER PROFILE STYLES
+========================================= */
+
+/* The main capsule container */
+.user-profile-badge {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: var(--color-secondary-50);
+  padding: 5px 5px 5px 16px; /* Left padding for text, small padding right for button */
+  border-radius: 50px; /* Pill shape */
+  border: 1px solid var(--color-secondary-200);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+  transition: all 0.2s ease;
+}
+
+.user-profile-badge:hover {
+  border-color: var(--color-primary-200);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+/* The text area (Hi, Name) */
+.user-info-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; /* Align text to the right side of the label */
+  line-height: 1.1;
+}
+
+.greeting {
+  font-size: 0.7rem;
+  color: var(--color-secondary-500);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.username {
+  font-size: 0.95rem;
+  color: var(--color-primary-800);
+  font-weight: 700;
+}
+
+/* The Log Out Button */
+.logout-btn-small {
+  background-color: white;
+  color: var(--color-secondary-600);
+  border: 1px solid var(--color-secondary-200);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.logout-btn-small:hover {
+  background-color: #fff1f2; /* Very light red */
+  color: #be123c; /* Rose red text */
+  border-color: #fda4af;
+}
+
+/* Mobile Tweak: Hide the name, keep the button */
+@media (max-width: 768px) {
+  .user-info-text {
+    display: none; /* Hides "Hi, Chris" on small screens */
+  }
+  
+  .user-profile-badge {
+    padding: 0;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+  }
+}
