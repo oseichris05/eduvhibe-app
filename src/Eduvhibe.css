@@ -225,7 +225,6 @@ body {
   background-color: var(--color-secondary-50);
 }
 
-
 /* =========================================
    3. MY ABOUT PAGE (HERO, TESTIMONIALS, PROFILE)
 ========================================= */
@@ -235,7 +234,7 @@ body {
   animation: fadeIn 0.5s ease-in-out;
 }
 
-/* The top section explaining Eduvhibe */
+/* --- HERO SECTION --- */
 .about-hero {
   display: flex;
   gap: 40px;
@@ -245,6 +244,7 @@ body {
   border: 1px solid var(--color-secondary-200);
   margin-bottom: 40px;
   box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+  align-items: center; /* Vertically center content */
 }
 
 .about-text-content {
@@ -295,18 +295,35 @@ body {
   margin-top: 2px;
 }
 
-/* My moving carousel section */
+/* --- TESTIMONIALS SECTION --- */
 .testimonials-section {
+  margin-bottom: 60px;
+}
+
+/* This was missing! It creates the side-by-side layout */
+.testimonials-layout {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 24px;
-  margin-bottom: 40px;
+  grid-template-columns: 1fr 1.5fr; /* Image takes 1 part, Carousel takes 1.5 parts */
+  gap: 30px;
+  align-items: center;
+}
+
+.community-image-side {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.community-banner-img {
+  width: 100%;
+  height: 300px; /* Fixed height for consistency */
+  border-radius: var(--sh-radius-card);
+  object-fit: cover;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
 .carousel-container {
   width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
   overflow: hidden; 
   position: relative;
   padding-bottom: 30px;
@@ -320,7 +337,7 @@ body {
 
 .carousel-slide {
   min-width: 100%; 
-  padding: 0 10px;
+  padding: 0 4px; /* Small padding so shadow doesn't get cut off */
   box-sizing: border-box;
 }
 
@@ -330,6 +347,7 @@ body {
   border-radius: var(--sh-radius-card);
   border: 1px solid var(--color-secondary-200);
   box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+  height: 100%; /* Ensure uniform height */
 }
 
 .testimonial-header {
@@ -383,9 +401,10 @@ body {
   border-radius: 5px; 
 }
 
-/* The card where I show off my skills */
+/* --- PROFILE SECTION --- */
 .edu-about-section {
   max-width: 700px;
+  margin: 60px auto 0;
 }
 
 .edu-profile-card {
@@ -425,11 +444,11 @@ body {
   font-size: 1.05rem;
 }
 
-/* My Image styling rules */
+/* --- IMAGE STYLES --- */
 .about-main-image {
   width: 100%;
   max-width: 400px;
-  height: 420px; 
+  height: 400px; 
   border-radius: var(--sh-radius-card);
   object-fit: cover; 
   object-position: center top; 
@@ -452,19 +471,58 @@ body {
   border: 3px solid var(--color-primary-500);
 }
 
-.community-banner-img {
-  width: 100%;
-  max-width: 800px;
-  height: 200px;
-  border-radius: var(--sh-radius-card);
-  object-fit: cover;
-  opacity: 0.9;
-}
 
-@media (max-width: 768px) {
-  .about-hero { flex-direction: column; }
-}
+/* =========================================
+   MOBILE RESPONSIVENESS (THE NUCLEAR FIX)
+   Forces vertical stacking on phones
+========================================= */
+@media (max-width: 900px) {
+  
+  /* 1. Stack the Hero Section */
+  .about-hero {
+    display: flex !important;
+    flex-direction: column-reverse !important; /* Text bottom, Image top */
+    padding: 20px !important;
+    gap: 30px !important;
+  }
 
+  .about-text-content {
+    text-align: center !important;
+    padding: 0 !important;
+  }
+  
+  .about-features-list li {
+    justify-content: flex-start; /* Keep list aligned left even if text is centered */
+    text-align: left;
+  }
+
+  .about-main-image {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 300px !important; /* Shorter on mobile */
+  }
+
+  /* 2. Stack the Testimonials */
+  .testimonials-layout {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 20px !important;
+  }
+
+  .community-image-side {
+    display: none !important; /* Hide big banner image on phone */
+  }
+
+  /* 3. Stack the Profile Card */
+  .edu-profile-card {
+    padding: 20px !important;
+  }
+
+  .profile-header {
+    flex-direction: column !important;
+    text-align: center !important;
+  }
+}
 
 /* =========================================
    4. MY COMPREHENSIVE FOOTER
