@@ -2125,3 +2125,56 @@ h4, h5, h6 {
     padding: 10px !important; /* Less padding on edges so text has more room */
   }
 }
+/* =========================================
+   17. CLEAN PAGINATION STYLES
+   (Minimalist Next/Prev buttons)
+========================================= */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px; /* Space between buttons */
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
+
+.page-btn {
+  background: white;
+  border: 1px solid var(--color-secondary-200);
+  min-width: 40px;
+  height: 40px;
+  border-radius: 12px; /* Smooth rounded corners */
+  color: var(--color-secondary-600);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-btn:hover:not(:disabled) {
+  border-color: var(--color-primary-500);
+  color: var(--color-primary-600);
+  background: var(--color-secondary-50);
+}
+
+.page-btn.active-page {
+  background: var(--color-primary-600);
+  color: white;
+  border-color: var(--color-primary-600);
+  box-shadow: 0 4px 10px rgba(13, 148, 136, 0.2);
+}
+
+.page-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+  background: var(--color-secondary-50);
+}
+
+.nav-btn {
+  padding: 0 16px; /* Wider for "Next/Prev" text */
+  width: auto;
+}
+

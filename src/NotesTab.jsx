@@ -1,4 +1,3 @@
-// src/NotesTab.jsx
 import React, { useState, useEffect } from 'react';
 import { supabase } from './supabaseClient';
 import { useUser } from './UserContext';
@@ -9,9 +8,11 @@ export default function NotesTab() {
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
   
-  // --- PAGINATION & SEARCH STATE ---
+  // --- PAGINATION SETTINGS ---
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(6); // Show 6 notes per page
+  const [itemsPerPage] = useState(6); // 6 cards keeps the grid clean (2 rows of 3)
+  
+  // --- SEARCH & FILTER ---
   const [searchTerm, setSearchTerm] = useState('');
   const [filterLevel, setFilterLevel] = useState('All');
 
@@ -20,11 +21,11 @@ export default function NotesTab() {
   const [showForm, setShowForm] = useState(false);
   const [newNote, setNewNote] = useState({ title: '', level: '100', file: null });
 
-  // --- FETCH NOTES ---
+  // 1. FETCH NOTES
   const fetchNotes = async () => {
     setLoading(true);
     const { data, error } = await supabase
-      .from('course_materials') // Ensure this matches your DB table name
+      .from('course_materials')
       .select('*')
       .order('created_at', { ascending: false });
 
@@ -37,7 +38,7 @@ export default function NotesTab() {
     fetchNotes();
   }, []);
 
-  // --- HANDLE UPLOAD ---
+  // 2. HANDLE UPLOAD (With 100MB Fix)
   const handleFileChange = (e) => {
     setNewNote({ ...newNote, file: e.target.files[0] });
   };
@@ -46,22 +47,21 @@ export default function NotesTab() {
     e.preventDefault();
     if (!newNote.file) return alert("Please select a file!");
 
-    // 1. FILE SIZE CHECK (100MB Limit)
-    const sizeLimit = 100 * 1024 * 1024; 
+    // --- SIZE CHECK ---
+    const sizeLimit = 100 * 1024 * 1024; // 100MB
     if (newNote.file.size > sizeLimit) {
-      alert("File is too big! Max size is 100MB.");
+      alert("File is too big! Please keep it under 100MB.");
       return;
     }
 
     setUploading(true);
-
-    // 2. Upload File to Storage Bucket
     const fileExt = newNote.file.name.split('.').pop();
     const fileName = `${Date.now()}.${fileExt}`;
     const filePath = `${fileName}`;
 
+    // Upload to Supabase Storage
     const { error: uploadError } = await supabase.storage
-      .from('course_notes') // Check if your bucket is named 'course_notes'
+      .from('course_notes')
       .upload(filePath, newNote.file);
 
     if (uploadError) {
@@ -70,12 +70,11 @@ export default function NotesTab() {
       return;
     }
 
-    // 3. Get Public URL
     const { data: { publicUrl } } = supabase.storage
       .from('course_notes')
       .getPublicUrl(filePath);
 
-    // 4. Save Metadata to Database
+    // Save to Database
     const { error: dbError } = await supabase
       .from('course_materials')
       .insert([{
@@ -89,48 +88,43 @@ export default function NotesTab() {
     if (dbError) {
       alert("Database error: " + dbError.message);
     } else {
-      alert("Note Uploaded Successfully!");
+      alert("Note Uploaded!");
       setShowForm(false);
       setNewNote({ title: '', level: '100', file: null });
-      fetchNotes(); // Refresh list
+      fetchNotes();
     }
     setUploading(false);
   };
 
-  // --- HANDLE DELETE ---
-  const handleDelete = async (id, fileUrl) => {
-    if (!window.confirm("Are you sure you want to delete this note?")) return;
-
-    // Try to delete from storage (optional, depends on policy)
-    // const fileName = fileUrl.split('/').pop();
-    // await supabase.storage.from('course_notes').remove([fileName]);
-
-    // Delete from DB
+  // 3. DELETE FUNCTION
+  const handleDelete = async (id) => {
+    if (!window.confirm("Delete this note?")) return;
     const { error } = await supabase.from('course_materials').delete().eq('id', id);
-    
-    if (error) alert("Error deleting: " + error.message);
-    else fetchNotes();
+    if (!error) fetchNotes();
   };
 
-  // --- FILTERING LOGIC ---
+  // 4. FILTERING & PAGINATION LOGIC
   const filteredNotes = notes.filter(note => {
     const matchesSearch = note.title.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesLevel = filterLevel === 'All' || note.level === filterLevel;
     return matchesSearch && matchesLevel;
   });
 
-  // --- PAGINATION LOGIC ---
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredNotes.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(filteredNotes.length / itemsPerPage);
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    // Smooth scroll to top of list when page changes
+    window.scrollTo({ top: 100, behavior: 'smooth' }); 
+  };
 
   return (
     <div className="notes-container fade-in">
       
-      {/* HEADER SECTION */}
+      {/* HEADER */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
         <div>
           <h2 style={{ color: 'var(--color-primary-900)', fontSize: '2rem', marginBottom: '8px' }}>Course Materials</h2>
@@ -144,15 +138,14 @@ export default function NotesTab() {
               color: 'white', border: 'none', padding: '10px 20px', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold'
             }}
           >
-            {showForm ? 'Close Upload' : '+ Upload Note'}
+            {showForm ? 'Close' : '+ Upload'}
           </button>
         )}
       </div>
 
-      {/* UPLOAD FORM (Admin Only) */}
+      {/* ADMIN UPLOAD FORM */}
       {isAdmin && showForm && (
         <div className="cgpa-card" style={{ marginBottom: '30px', backgroundColor: '#f0fdfa', border: '1px dashed var(--color-primary-300)' }}>
-          <h3 style={{ marginBottom: '15px', color: 'var(--color-primary-800)' }}>Upload New Material</h3>
           <form onSubmit={handleUpload} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
             <div style={{ display: 'flex', gap: '10px' }}>
               <input 
@@ -175,25 +168,21 @@ export default function NotesTab() {
               backgroundColor: uploading ? 'var(--color-secondary-400)' : 'var(--color-primary-600)',
               color: 'white', border: 'none', padding: '12px', borderRadius: '8px', cursor: uploading ? 'not-allowed' : 'pointer', fontWeight: 'bold'
             }}>
-              {uploading ? 'Uploading (Please wait)...' : 'Upload File'}
+              {uploading ? 'Uploading...' : 'Upload File'}
             </button>
           </form>
         </div>
       )}
 
-      {/* SEARCH & FILTER BAR */}
+      {/* SEARCH BAR */}
       <div className="notes-toolbar">
         <input 
-          type="text" 
-          placeholder="Search notes..." 
-          className="notes-search-input"
-          value={searchTerm}
-          onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }} // Reset to page 1 on search
+          type="text" placeholder="Search notes..." className="notes-search-input"
+          value={searchTerm} onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
         />
         <select 
           className="notes-filter"
-          value={filterLevel}
-          onChange={(e) => { setFilterLevel(e.target.value); setCurrentPage(1); }}
+          value={filterLevel} onChange={(e) => { setFilterLevel(e.target.value); setCurrentPage(1); }}
         >
           <option value="All">All Levels</option>
           <option value="100">Level 100</option>
@@ -203,9 +192,9 @@ export default function NotesTab() {
         </select>
       </div>
 
-      {/* NOTES GRID */}
+      {/* GRID LAYOUT */}
       {loading ? (
-        <p style={{ textAlign: 'center' }}>Loading library...</p>
+        <p style={{ textAlign: 'center', padding: '40px' }}>Loading...</p>
       ) : currentItems.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '40px', color: 'var(--color-secondary-500)' }}>
           No notes found.
@@ -221,21 +210,17 @@ export default function NotesTab() {
                     <span style={{ background: 'rgba(255,255,255,0.2)', padding: '2px 8px', borderRadius: '4px' }}>
                       Lvl {note.level}
                     </span>
-                    <span>{note.file_type?.toUpperCase() || 'PDF'}</span>
+                    <span>{note.file_type?.toUpperCase() || 'FILE'}</span>
                   </div>
                 </div>
                 <div className="course-card-bottom">
-                  <p>Uploaded on {new Date(note.created_at).toLocaleDateString()}</p>
+                  <p>Uploaded: {new Date(note.created_at).toLocaleDateString()}</p>
                   <div className="course-actions">
                     <a href={note.file_url} target="_blank" rel="noopener noreferrer" className="btn-download">
                       Download
                     </a>
                     {isAdmin && (
-                      <button 
-                        onClick={() => handleDelete(note.id, note.file_url)}
-                        className="btn-preview"
-                        style={{ color: '#ef4444', borderColor: '#ef4444' }}
-                      >
+                      <button onClick={() => handleDelete(note.id)} className="btn-preview" style={{ color: '#ef4444', borderColor: '#ef4444' }}>
                         Delete
                       </button>
                     )}
@@ -245,18 +230,13 @@ export default function NotesTab() {
             ))}
           </div>
 
-          {/* PAGINATION CONTROLS */}
+          {/* CLEAN PAGINATION */}
           {totalPages > 1 && (
             <div className="pagination-container">
-              <button 
-                className="page-btn nav-btn" 
-                onClick={() => paginate(currentPage - 1)}
-                disabled={currentPage === 1}
-              >
+              <button className="page-btn nav-btn" onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>
                 Previous
               </button>
               
-              {/* Generate Page Numbers */}
               {[...Array(totalPages)].map((_, index) => (
                 <button
                   key={index + 1}
@@ -267,11 +247,7 @@ export default function NotesTab() {
                 </button>
               ))}
 
-              <button 
-                className="page-btn nav-btn" 
-                onClick={() => paginate(currentPage + 1)}
-                disabled={currentPage === totalPages}
-              >
+              <button className="page-btn nav-btn" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}>
                 Next
               </button>
             </div>
