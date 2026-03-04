@@ -1900,71 +1900,77 @@ body {
   }
 }
 
-
 /* =========================================
-   15. UNIFIED NAVBAR STYLES (NO HEADER/FOOTER)
+   15. UNIFIED NAVBAR STYLES (The "App Vibe" Layout)
 ========================================= */
 
-/* The Container Bar */
+/* THE CONTAINER (Sticky Glass Header) */
 .unified-navbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 20px;
-  background-color: white;
-  border-bottom: 1px solid var(--color-secondary-200);
+  padding: 15px 30px;
+  background-color: rgba(255, 255, 255, 0.96); /* Slightly transparent */
+  backdrop-filter: blur(12px); /* THE SURPRISE: Glass blur effect */
+  border-bottom: 1px solid rgba(0,0,0,0.05);
   position: sticky;
   top: 0;
   z-index: 1000;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+  transition: all 0.3s ease;
 }
 
 /* 1. BRAND LOGO */
 .nav-brand .brand-text {
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: var(--color-primary-900);
+  font-size: 1.8rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--color-primary-600) 0%, var(--color-primary-800) 100%);
+  
+  /* --- ADD THIS LINE TO FIX THE ERROR --- */
+  background-clip: text; 
+  /* -------------------------------------- */
+  
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   letter-spacing: -0.5px;
   cursor: pointer;
 }
 
-/* 2. CENTER TABS (The Pill Buttons) */
+/* 2. CENTER TABS (Desktop View) */
 .nav-tabs-scroll {
-  flex: 1; /* Takes up all available middle space */
+  flex: 1;
   display: flex;
   justify-content: center;
-  gap: 8px;
-  overflow-x: auto; /* Allows scrolling on small screens if needed */
-  padding: 0 10px;
-  scrollbar-width: none; /* Hide scrollbar Firefox */
+  gap: 10px;
+  padding: 0 20px;
 }
-.nav-tabs-scroll::-webkit-scrollbar { display: none; } /* Hide scrollbar Chrome */
 
 .nav-pill {
   background: transparent;
   border: none;
-  padding: 8px 16px;
-  border-radius: 20px;
+  padding: 10px 20px;
+  border-radius: 50px; /* Full pill shape */
   color: var(--color-secondary-600);
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 1rem;
   cursor: pointer;
-  white-space: nowrap; /* Prevents text from wrapping */
-  transition: all 0.2s;
+  white-space: nowrap;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .nav-pill:hover {
   background-color: var(--color-secondary-50);
   color: var(--color-primary-600);
+  transform: translateY(-1px); /* Subtle lift */
 }
 
 .nav-pill.active {
-  background-color: var(--color-primary-500);
+  background-color: var(--color-primary-600);
   color: white;
-  box-shadow: 0 2px 5px rgba(20, 184, 166, 0.3);
+  box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3); /* Glow effect */
+  transform: translateY(0);
 }
 
-/* 3. AUTH SECTION (Right Side) */
+/* 3. AUTH SECTION */
 .nav-auth-section {
   display: flex;
   align-items: center;
@@ -1974,37 +1980,49 @@ body {
   background-color: var(--color-primary-900);
   color: white;
   border: none;
-  padding: 8px 20px;
-  border-radius: 20px;
-  font-weight: 600;
+  padding: 10px 24px;
+  border-radius: 50px;
+  font-weight: 700;
   cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+
+.mini-login-btn:hover {
+  transform: scale(1.05);
 }
 
 .mini-profile {
   display: flex;
   align-items: center;
-  gap: 10px;
-  background-color: var(--color-secondary-50);
-  padding: 4px 4px 4px 12px;
-  border-radius: 30px;
+  gap: 12px;
+  background-color: white;
+  padding: 5px 6px 5px 16px;
+  border-radius: 50px;
   border: 1px solid var(--color-secondary-200);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.03);
 }
 
 .mini-name {
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   font-weight: 700;
-  color: var(--color-primary-800);
+  color: var(--color-primary-900);
 }
 
 .mini-logout-btn {
-  background: white;
-  border: 1px solid var(--color-secondary-200);
-  padding: 5px 12px;
+  background: var(--color-secondary-100);
+  border: none;
+  padding: 6px 14px;
   border-radius: 20px;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   cursor: pointer;
-  color: #ef4444; /* Red for logout */
-  font-weight: 600;
+  color: #ef4444;
+  font-weight: 700;
+  transition: background 0.2s;
+}
+
+.mini-logout-btn:hover {
+  background: #fee2e2;
 }
 
 /* CONTENT PADDING */
@@ -2014,39 +2032,73 @@ body {
   margin: 0 auto;
 }
 
-/* --- MOBILE RESPONSIVENESS --- */
+/* =========================================
+   MOBILE MAGIC (The "Swap" Layout)
+========================================= */
 @media (max-width: 768px) {
+  
   .unified-navbar {
-    flex-wrap: wrap; /* Allows items to wrap to next line */
-    padding: 10px 15px;
-    gap: 10px;
+    display: grid;
+    /* This grid forces 2 rows: 
+       Row 1: Logo (Left) ----- Login (Right)
+       Row 2: Tabs (Full Width)
+    */
+    grid-template-columns: 1fr auto; 
+    grid-template-rows: auto auto;
+    padding: 15px 20px 0px 20px; /* Remove bottom padding so tabs hit the edge */
+    gap: 15px;
   }
 
-  /* Force Logo and Auth to stay on the top row */
-  .nav-brand { order: 1; }
-  .nav-auth-section { order: 2; }
-  
-  /* Force Tabs to drop to the second row */
+  /* 1. Logo stays Top-Left */
+  .nav-brand {
+    grid-column: 1;
+    grid-row: 1;
+    display: flex;
+    align-items: center;
+  }
+
+  /* 2. Login/Profile stays Top-Right */
+  .nav-auth-section {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  /* 3. Tabs move to Bottom Row & Scroll */
   .nav-tabs-scroll {
-    order: 3;
-    width: 100%; /* Take full width */
-    justify-content: flex-start; /* Align left for scrolling */
-    border-top: 1px solid var(--color-secondary-100);
-    padding-top: 10px;
-    padding-left: 0;
+    grid-column: 1 / -1; /* Span full width */
+    grid-row: 2;
+    
+    justify-content: flex-start; /* Align left to allow scrolling */
+    overflow-x: auto; /* Enable horizontal swipe */
+    padding-bottom: 12px; /* Space for scrollbar */
+    padding-left: 5px;
+    padding-right: 5px;
+    gap: 12px;
+    
+    /* Hide the ugly scrollbar but keep functionality */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
   }
   
+  .nav-tabs-scroll::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+
+  /* Mobile Button Styling */
   .nav-pill {
-    font-size: 0.85rem;
-    padding: 6px 14px;
-    background-color: var(--color-secondary-50); /* Make them look like buttons */
+    background: var(--color-secondary-100);
+    color: var(--color-secondary-600);
+    padding: 8px 18px;
+    font-size: 0.95rem;
+    flex-shrink: 0; /* Prevents buttons from squishing */
   }
-  
+
   .nav-pill.active {
-    background-color: var(--color-primary-500);
+    background: var(--color-primary-600);
+    color: white;
+    box-shadow: 0 4px 10px rgba(13, 148, 136, 0.25);
   }
 }
-
 
 /* =========================================
    16. GLOBAL FONT ENFORCER (The "Big Text" Fix)

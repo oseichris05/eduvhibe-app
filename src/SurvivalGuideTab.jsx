@@ -49,6 +49,10 @@ export default function SurvivalGuideTab() {
   const [viewMode, setViewMode] = useState('list'); 
   const [activeArticle, setActiveArticle] = useState(null);
 
+  // --- PAGINATION STATE ---
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6; // 6 articles per page
+
   // Search & Filter
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('all');
@@ -57,10 +61,9 @@ export default function SurvivalGuideTab() {
   const [showForm, setShowForm] = useState(false);
   const [uploading, setUploading] = useState(false);
   
-  // UPDATED STATE: Added 'author'
   const [newGuide, setNewGuide] = useState({
     title: '', 
-    author: '', // <--- NEW FIELD
+    author: '', 
     category: 'Academic', 
     image_url: '', 
     content: '', 
@@ -96,7 +99,6 @@ export default function SurvivalGuideTab() {
     e.preventDefault();
     if (!isAdmin) return;
     
-    // Default author if empty
     const guideToUpload = {
       ...newGuide,
       author: newGuide.author || 'Eduvhibe Team'
@@ -109,7 +111,6 @@ export default function SurvivalGuideTab() {
     } else {
       alert("Article Published!");
       setShowForm(false);
-      // Reset form including author
       setNewGuide({ title: '', author: '', category: 'Academic', image_url: '', content: '', read_time: '3 min read' });
       fetchGuides();
     }
@@ -124,6 +125,7 @@ export default function SurvivalGuideTab() {
     if (activeArticle?.id === id) setViewMode('list');
   };
 
+  // --- FILTERING LOGIC ---
   const filteredGuides = guides.filter(guide => {
     const searchLower = searchQuery.toLowerCase();
     const matchesSearch = 
@@ -133,7 +135,18 @@ export default function SurvivalGuideTab() {
     return matchesSearch && matchesCategory;
   });
 
-  // --- RENDER: READING MODE ---
+  // --- PAGINATION CALCULATION ---
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredGuides.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredGuides.length / itemsPerPage);
+
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // --- RENDER: READING MODE (No Pagination Needed Here) ---
   if (viewMode === 'reading' && activeArticle) {
     const recommended = guides.filter(g => g.id !== activeArticle.id).slice(0, 4);
 
@@ -150,7 +163,6 @@ export default function SurvivalGuideTab() {
               <img src={activeArticle.image_url} alt="Cover" className="article-hero-img" />
             )}
             
-            {/* META ROW WITH AUTHOR */}
             <div className="article-meta-row">
               <span className="guide-category-badge">{activeArticle.category}</span>
               <span style={{ fontWeight: '600', color: 'var(--color-primary-700)' }}>
@@ -193,7 +205,7 @@ export default function SurvivalGuideTab() {
     );
   }
 
-  // --- RENDER: LIST MODE ---
+  // --- RENDER: LIST MODE (With Pagination) ---
   return (
     <div className="guides-container fade-in" style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
       
@@ -218,8 +230,8 @@ export default function SurvivalGuideTab() {
 
       <SearchBar 
         placeholder="Search guides by title or content..." 
-        onSearch={setSearchQuery} 
-        onFilter={setSelectedFilter} 
+        onSearch={(val) => { setSearchQuery(val); setCurrentPage(1); }} 
+        onFilter={(val) => { setSelectedFilter(val); setCurrentPage(1); }} 
         filterOptions={filterOptions} 
       />
 
@@ -235,7 +247,6 @@ export default function SurvivalGuideTab() {
               <input type="text" placeholder="Article Title" required className="cgpa-input" style={{ flex: 2 }}
                 value={newGuide.title} onChange={(e) => setNewGuide({ ...newGuide, title: e.target.value })} />
               
-              {/* NEW AUTHOR INPUT */}
               <input type="text" placeholder="Author (e.g. Don Chris)" className="cgpa-input" style={{ flex: 1 }}
                 value={newGuide.author} onChange={(e) => setNewGuide({ ...newGuide, author: e.target.value })} />
             </div>
@@ -283,46 +294,76 @@ export default function SurvivalGuideTab() {
           <p style={{ color: 'var(--color-secondary-500)' }}>Try a different search term or category.</p>
         </div>
       ) : (
-        <div className="guides-grid">
-          {filteredGuides.map((guide) => (
-            <div key={guide.id} className="guide-card" onClick={() => { setActiveArticle(guide); setViewMode('reading'); }}>
-              <div className="guide-image-container">
-                {guide.image_url ? (
-                  <img src={guide.image_url} alt={guide.title} className="guide-image" />
-                ) : (
-                  <div style={{ width: '100%', height: '100%', backgroundColor: 'var(--color-primary-100)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-primary-300)' }}>
-                    No Image
-                  </div>
-                )}
-                <span className="guide-category-badge">{guide.category}</span>
-              </div>
-              
-              <div className="guide-content">
-                <h3 className="guide-title">{guide.title}</h3>
-                <p className="guide-excerpt">
-                  {guide.content.replace(/[#*`>]/g, '').substring(0, 100)}...
-                </p>
-                
-                <div className="guide-footer">
-                   {/* SHOW AUTHOR ON CARD */}
-                  <span style={{ fontSize: '0.8rem', color: 'var(--color-primary-700)', fontWeight: '600' }}>
-                     By {guide.author || 'Team'}
-                  </span>
-                  <button className="guide-read-btn">Read Article →</button>
+        <>
+          <div className="guides-grid">
+            {currentItems.map((guide) => (
+              <div key={guide.id} className="guide-card" onClick={() => { setActiveArticle(guide); setViewMode('reading'); }}>
+                <div className="guide-image-container">
+                  {guide.image_url ? (
+                    <img src={guide.image_url} alt={guide.title} className="guide-image" />
+                  ) : (
+                    <div style={{ width: '100%', height: '100%', backgroundColor: 'var(--color-primary-100)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-primary-300)' }}>
+                      No Image
+                    </div>
+                  )}
+                  <span className="guide-category-badge">{guide.category}</span>
                 </div>
+                
+                <div className="guide-content">
+                  <h3 className="guide-title">{guide.title}</h3>
+                  <p className="guide-excerpt">
+                    {guide.content.replace(/[#*`>]/g, '').substring(0, 100)}...
+                  </p>
+                  
+                  <div className="guide-footer">
+                    <span style={{ fontSize: '0.8rem', color: 'var(--color-primary-700)', fontWeight: '600' }}>
+                       By {guide.author || 'Team'}
+                    </span>
+                    <button className="guide-read-btn">Read Article →</button>
+                  </div>
+                </div>
+                
+                {isAdmin && (
+                  <button 
+                    onClick={(e) => handleDelete(e, guide.id)}
+                    style={{ width: '100%', padding: '8px', background: '#fee2e2', color: '#b91c1c', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}
+                  >
+                    Delete Guide
+                  </button>
+                )}
               </div>
+            ))}
+          </div>
+
+          {/* CLEAN PAGINATION CONTROLS */}
+          {totalPages > 1 && (
+            <div className="pagination-container">
+              <button className="page-btn nav-btn" onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>
+                Previous
+              </button>
               
-              {isAdmin && (
-                <button 
-                  onClick={(e) => handleDelete(e, guide.id)}
-                  style={{ width: '100%', padding: '8px', background: '#fee2e2', color: '#b91c1c', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}
-                >
-                  Delete Guide
-                </button>
-              )}
+              {[...Array(totalPages)].map((_, index) => {
+                 // Show limited dots if many pages
+                 if (totalPages > 6 && (index > 2 && index < totalPages - 3 && index !== currentPage - 1)) {
+                    return index === 3 ? <span key="dots">...</span> : null;
+                 }
+                 return (
+                  <button
+                    key={index + 1}
+                    onClick={() => paginate(index + 1)}
+                    className={`page-btn ${currentPage === index + 1 ? 'active-page' : ''}`}
+                  >
+                    {index + 1}
+                  </button>
+                 );
+              })}
+
+              <button className="page-btn nav-btn" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}>
+                Next
+              </button>
             </div>
-          ))}
-        </div>
+          )}
+        </>
       )}
     </div>
   );
