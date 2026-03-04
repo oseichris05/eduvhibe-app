@@ -6,11 +6,14 @@ import SearchBar from './SearchBar';
 import './Eduvhibe.css';
 
 export default function VideosTab() {
-  // Grab the global 'isAdmin' flag from our Context
   const { session, isAdmin } = useUser(); 
   
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // --- PAGINATION STATE ---
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6; // 6 videos per page
 
   // --- SEARCH STATE ---
   const [searchQuery, setSearchQuery] = useState('');
@@ -59,10 +62,8 @@ export default function VideosTab() {
 
   const handleAddVideo = async (e) => {
     e.preventDefault();
-    if (!isAdmin) return; // Secure check
+    if (!isAdmin) return; 
     if (!title || !videoUrl) return alert("Title and YouTube URL are required.");
-
-    // Validate YouTube URL
     if (!getYouTubeId(videoUrl)) return alert("Please enter a valid YouTube URL.");
 
     setAdding(true);
@@ -80,14 +81,14 @@ export default function VideosTab() {
 
     } catch (error) {
       console.error("Error adding video:", error);
-      alert("Failed to add video. Make sure you are an Admin.");
+      alert("Failed to add video.");
     } finally {
       setAdding(false);
     }
   };
 
   const handleDeleteVideo = async (id) => {
-    if (!isAdmin) return; // Secure check
+    if (!isAdmin) return; 
     if (!window.confirm("Are you sure you want to delete this video?")) return;
 
     try {
@@ -96,11 +97,11 @@ export default function VideosTab() {
       setVideos(videos.filter(v => v.id !== id));
     } catch (error) {
       console.error("Delete failed:", error);
-      alert("Failed to delete video. Database permission denied.");
+      alert("Failed to delete video.");
     }
   };
 
-  // --- FILTER ENGINE ---
+  // --- FILTER & PAGINATION LOGIC ---
   const filteredVideos = videos.filter(video => {
     const searchLower = searchQuery.toLowerCase();
     const matchesSearch = 
@@ -110,6 +111,17 @@ export default function VideosTab() {
 
     return matchesSearch && matchesLevel;
   });
+
+  // Calculate Pagination Slices
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredVideos.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredVideos.length / itemsPerPage);
+
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
     <div className="fade-in" style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
@@ -135,8 +147,8 @@ export default function VideosTab() {
 
       <SearchBar 
         placeholder="Search videos by title..." 
-        onSearch={setSearchQuery} 
-        onFilter={setSelectedFilter} 
+        onSearch={(val) => { setSearchQuery(val); setCurrentPage(1); }} 
+        onFilter={(val) => { setSelectedFilter(val); setCurrentPage(1); }} 
         filterOptions={filterOptions} 
       />
 
@@ -182,55 +194,85 @@ export default function VideosTab() {
           <h3 style={{ color: 'var(--color-secondary-700)' }}>No videos found.</h3>
         </div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '25px' }}>
-          {filteredVideos.map((video) => {
-            const videoId = getYouTubeId(video.video_url);
-            const thumbnailUrl = videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : null;
+        <>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '25px' }}>
+            {currentItems.map((video) => {
+              const videoId = getYouTubeId(video.video_url);
+              const thumbnailUrl = videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : null;
 
-            return (
-              <div key={video.id} className="cgpa-card" style={{ padding: '0', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-                {/* VIDEO THUMBNAIL / EMBED TRIGGER */}
-                <div style={{ position: 'relative', width: '100%', paddingTop: '56.25%', backgroundColor: '#000' }}>
-                   {thumbnailUrl ? (
-                     <a href={video.video_url} target="_blank" rel="noopener noreferrer">
-                       <img 
-                         src={thumbnailUrl} 
-                         alt={video.title}
-                         style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: '0.9' }}
-                       />
-                       <div style={{
-                         position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
-                         width: '50px', height: '50px', backgroundColor: 'rgba(0,0,0,0.7)', borderRadius: '50%',
-                         display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid white'
-                       }}>
-                         <span style={{ color: 'white', fontSize: '20px', marginLeft: '4px' }}>▶</span>
+              return (
+                <div key={video.id} className="cgpa-card" style={{ padding: '0', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                  {/* VIDEO THUMBNAIL / EMBED TRIGGER */}
+                  <div style={{ position: 'relative', width: '100%', paddingTop: '56.25%', backgroundColor: '#000' }}>
+                     {thumbnailUrl ? (
+                       <a href={video.video_url} target="_blank" rel="noopener noreferrer">
+                         <img 
+                           src={thumbnailUrl} 
+                           alt={video.title}
+                           style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: '0.9' }}
+                         />
+                         <div style={{
+                           position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+                           width: '50px', height: '50px', backgroundColor: 'rgba(0,0,0,0.7)', borderRadius: '50%',
+                           display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid white'
+                         }}>
+                           <span style={{ color: 'white', fontSize: '20px', marginLeft: '4px' }}>▶</span>
+                         </div>
+                       </a>
+                     ) : (
+                       <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
+                         Invalid Video Link
                        </div>
-                     </a>
-                   ) : (
-                     <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
-                       Invalid Video Link
-                     </div>
-                   )}
-                </div>
-
-                <div style={{ padding: '20px', flexGrow: 1 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '8px' }}>
-                    <span style={{ backgroundColor: 'var(--color-primary-100)', color: 'var(--color-primary-800)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold' }}>
-                      Lvl {video.level}
-                    </span>
-                    {isAdmin && (
-                      <button onClick={() => handleDeleteVideo(video.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1rem' }} title="Delete Video">
-                        🗑️
-                      </button>
-                    )}
+                     )}
                   </div>
-                  <h3 style={{ fontSize: '1.1rem', marginBottom: '8px', lineHeight: '1.4' }}>{video.title}</h3>
-                  <p style={{ fontSize: '0.9rem', color: 'var(--color-secondary-600)' }}>{video.description}</p>
+
+                  <div style={{ padding: '20px', flexGrow: 1 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '8px' }}>
+                      <span style={{ backgroundColor: 'var(--color-primary-100)', color: 'var(--color-primary-800)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold' }}>
+                        Lvl {video.level}
+                      </span>
+                      {isAdmin && (
+                        <button onClick={() => handleDeleteVideo(video.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1rem' }} title="Delete Video">
+                          🗑️
+                        </button>
+                      )}
+                    </div>
+                    <h3 style={{ fontSize: '1.1rem', marginBottom: '8px', lineHeight: '1.4' }}>{video.title}</h3>
+                    <p style={{ fontSize: '0.9rem', color: 'var(--color-secondary-600)' }}>{video.description}</p>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+
+          {/* CLEAN PAGINATION CONTROLS */}
+          {totalPages > 1 && (
+            <div className="pagination-container">
+              <button className="page-btn nav-btn" onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>
+                Previous
+              </button>
+              
+              {[...Array(totalPages)].map((_, index) => {
+                 if (totalPages > 6 && (index > 2 && index < totalPages - 3 && index !== currentPage - 1)) {
+                    return index === 3 ? <span key="dots">...</span> : null;
+                 }
+                 return (
+                  <button
+                    key={index + 1}
+                    onClick={() => paginate(index + 1)}
+                    className={`page-btn ${currentPage === index + 1 ? 'active-page' : ''}`}
+                  >
+                    {index + 1}
+                  </button>
+                 );
+              })}
+
+              <button className="page-btn nav-btn" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}>
+                Next
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
