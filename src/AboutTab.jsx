@@ -6,6 +6,8 @@ import './Eduvhibe.css';
 import mainHeroImage from './assets/main-img.jpg'; 
 import myProfileImage from './assets/chris.jpg';
 import michaelTestimonialImage from './assets/michael.jpg';
+import kwabenaTestimonialImage from './assets/kwabena-boateng.jpg';
+import amoahTestimonialImage from './assets/amoah-portia.jpg';
 
 export default function AboutTab() {
   const heroRef = useRef(null);
@@ -19,7 +21,7 @@ export default function AboutTab() {
       name: "Kwabena Boateng Agyei",
       role: "Software Developer & Founder",
       quote: "I, the Ceo and the Founder of Sharether.com and a partner of Eduvhibe, testify that the website is real, valid, reliable, engaging and more suitable for studying course materials.",
-      image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&h=150&fit=crop&crop=faces"
+      image: kwabenaTestimonialImage
     },
     {
       id: 2,
@@ -33,7 +35,7 @@ export default function AboutTab() {
       name: "Amoah Portia",
       role: "Student",
       quote: "The CGPA tracker alone saved me so much stress this semester. Having all my course materials organized in one clean dashboard is exactly what we needed on campus.",
-      image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=faces"
+      image: amoahTestimonialImage
     },
     {
       id: 4,
